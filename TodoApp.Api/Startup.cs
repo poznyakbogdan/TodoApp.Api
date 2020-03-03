@@ -1,9 +1,17 @@
+using System;
+using AutoMapper;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.EntityFrameworkCore.Design;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.OpenApi.Models;
+using TodoApp.Core;
+using TodoApp.DAL;
+using TodoApp.DAL.Repositories;
+using TodoApp.Infra;
+using TodoApp.Infra.Interfaces;
 
 namespace TodoApp.Api
 {
@@ -19,6 +27,15 @@ namespace TodoApp.Api
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
+            services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
+
+            services.AddTransient<IDesignTimeDbContextFactory<ApplicationContext>, ApplicationContextFactory>();
+            services.AddTransient(x =>
+                x.GetService<IDesignTimeDbContextFactory<ApplicationContext>>().CreateDbContext(new[] {""}));
+            
+            services.AddTransient<ITasksRepository, TasksRepository>();
+            services.AddTransient<ITasksService, TasksService>();
+            
             services.AddControllers();
 
             services.AddSwaggerGen(x =>

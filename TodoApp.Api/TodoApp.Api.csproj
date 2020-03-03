@@ -9,10 +9,13 @@
     </ItemGroup>
 
     <ItemGroup>
+      <ProjectReference Include="..\TodoApp.Core\TodoApp.Core.csproj" />
+      <ProjectReference Include="..\TodoApp.DAL\TodoApp.DAL.csproj" />
       <ProjectReference Include="..\TodoApp.Infra\TodoApp.Infra.csproj" />
     </ItemGroup>
 
     <ItemGroup>
+      <PackageReference Include="AutoMapper.Extensions.Microsoft.DependencyInjection" Version="7.0.0" />
       <PackageReference Include="Swashbuckle.AspNetCore" Version="5.0.0" />
     </ItemGroup>
 

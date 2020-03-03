@@ -1,7 +1,10 @@
 ﻿using System.Collections.Generic;
 using System.Threading.Tasks;
+using AutoMapper;
 using Microsoft.AspNetCore.Mvc;
 using TodoApp.Api.Models;
+using TodoApp.Infra.Dto;
+using TodoApp.Infra.Interfaces;
 
 namespace TodoApp.Api.Controllers
 {
@@ -9,13 +12,23 @@ namespace TodoApp.Api.Controllers
     [Route("[controller]")]
     public class TasksController : ControllerBase
     {
+        private readonly ITasksService _tasksService;
+        private readonly IMapper _mapper;
+
+        public TasksController(ITasksService tasksService, IMapper mapper)
+        {
+            _tasksService = tasksService;
+            _mapper = mapper;
+        }
+
         [HttpGet]
         [ProducesResponseType(200)]
         [ProducesResponseType(404)]
         [ProducesResponseType(500)]
         public async Task<IEnumerable<TaskOutputModel>> Get()
         {
-            return new List<TaskOutputModel>();
+            var tasks = await _tasksService.Get();
+            return _mapper.Map<IEnumerable<TaskOutputModel>>(tasks);
         }
         
         [HttpPost]
@@ -24,7 +37,7 @@ namespace TodoApp.Api.Controllers
         [ProducesResponseType(500)]
         public async Task<TaskOutputModel> Create([FromBody] TaskInputModel task)
         {
-            return new TaskOutputModel();
+            return _mapper.Map<TaskOutputModel>(await _tasksService.CreateTask(_mapper.Map<TaskDto>(task)));
         }
     }
 }
