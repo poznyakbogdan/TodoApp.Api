@@ -38,6 +38,11 @@ namespace TodoApp.Api
             
             services.AddControllers();
 
+            services.AddCors(options =>
+            {
+                options.AddDefaultPolicy(builder => { builder.AllowAnyOrigin().AllowAnyMethod().AllowAnyHeader(); });
+            });
+
             services.AddSwaggerGen(x =>
             {
                 x.SwaggerDoc("v1", new OpenApiInfo()
@@ -66,6 +71,8 @@ namespace TodoApp.Api
             app.UseHttpsRedirection();
             
             app.UseRouting();
+
+            app.UseCors();
             
             app.UseEndpoints(endpoints =>
             {
