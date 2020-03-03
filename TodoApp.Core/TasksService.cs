@@ -1,6 +1,5 @@
 ﻿using System.Collections.Generic;
 using System.Threading.Tasks;
-using TodoApp.Infra;
 using TodoApp.Infra.Dto;
 using TodoApp.Infra.Interfaces;
 
@@ -29,6 +28,17 @@ namespace TodoApp.Core
         public async Task<IEnumerable<TaskDto>> Get()
         {
             return await _tasksRepository.Get();
+        }
+
+        public async Task<TaskDto> Update(int id, TaskDto taskDto)
+        {
+            await _tasksRepository.Update(id, taskDto);
+            return await GetById(id);
+        }
+
+        public async Task Remove(int id)
+        {
+            await _tasksRepository.Remove(id);
         }
     }
 }
