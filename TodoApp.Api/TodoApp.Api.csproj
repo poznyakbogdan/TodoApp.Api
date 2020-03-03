@@ -8,5 +8,13 @@
       <_ContentIncludedByDefault Remove="Properties\launchSettings.json" />
     </ItemGroup>
 
+    <ItemGroup>
+      <ProjectReference Include="..\TodoApp.Infra\TodoApp.Infra.csproj" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <PackageReference Include="Swashbuckle.AspNetCore" Version="5.0.0" />
+    </ItemGroup>
+
 
 </Project>
