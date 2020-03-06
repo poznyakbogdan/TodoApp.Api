@@ -7,6 +7,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.OpenApi.Models;
+using Serilog;
 using TodoApp.Core;
 using TodoApp.DAL;
 using TodoApp.DAL.Repositories;
@@ -62,6 +63,8 @@ namespace TodoApp.Api
             {
                 app.UseDeveloperExceptionPage();
             }
+
+            app.UseSerilogRequestLogging();
             
             app.UseSwagger();
             app.UseSwaggerUI(x =>

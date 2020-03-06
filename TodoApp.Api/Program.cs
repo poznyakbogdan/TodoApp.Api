@@ -2,6 +2,7 @@ using System;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Hosting;
+using Serilog;
 
 namespace TodoApp.Api
 {
@@ -9,7 +10,20 @@ namespace TodoApp.Api
     {
         public static void Main(string[] args)
         {
-            CreateHostBuilder(args).Build().Run();
+            try
+            {
+                var webHost = CreateHostBuilder(args).Build();
+                Log.Information("Starting web host...");
+                webHost.Run();
+            }
+            catch (Exception e)
+            {
+                Log.Fatal(e, "Host terminated unexpectedly");
+            }
+            finally
+            {
+                Log.CloseAndFlush();
+            }
         }
 
         public static IHostBuilder CreateHostBuilder(string[] args) =>
@@ -22,6 +36,7 @@ namespace TodoApp.Api
                         .AddJsonFile($"appsettings.{env}.json");
 
                 }))
-                .ConfigureWebHostDefaults(webBuilder => { webBuilder.UseStartup<Startup>(); });
+                .ConfigureWebHostDefaults(webBuilder => { webBuilder.UseStartup<Startup>(); })
+                .UseSerilog((context, configuration) => { configuration.ReadFrom.Configuration(context.Configuration); });
     }
 }
