@@ -5,8 +5,11 @@ namespace TodoApp.DAL
 {
     public class ApplicationContextFactory : IDesignTimeDbContextFactory<ApplicationContext>
     {
-        private readonly string _connectionString = "server=localhost;database=todo;user=dev;password=qwerty";
-        
+        private readonly string _connectionString;
+        public ApplicationContextFactory(string connectionString)
+        {
+            _connectionString = connectionString;
+        }
         public ApplicationContext CreateDbContext(string[] args)
         {
             var builder = new DbContextOptionsBuilder();

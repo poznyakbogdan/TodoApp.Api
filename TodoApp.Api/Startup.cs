@@ -10,7 +10,6 @@ using Microsoft.OpenApi.Models;
 using TodoApp.Core;
 using TodoApp.DAL;
 using TodoApp.DAL.Repositories;
-using TodoApp.Infra;
 using TodoApp.Infra.Interfaces;
 
 namespace TodoApp.Api
@@ -27,9 +26,12 @@ namespace TodoApp.Api
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
+            var config = new Config();
+            Configuration.Bind(config);
+            
             services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
 
-            services.AddTransient<IDesignTimeDbContextFactory<ApplicationContext>, ApplicationContextFactory>();
+            services.AddTransient<IDesignTimeDbContextFactory<ApplicationContext>>(x => new ApplicationContextFactory(config.DatabaseConnectionString));
             services.AddTransient(x =>
                 x.GetService<IDesignTimeDbContextFactory<ApplicationContext>>().CreateDbContext(new[] {""}));
             

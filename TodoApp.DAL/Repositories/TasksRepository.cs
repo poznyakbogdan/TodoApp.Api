@@ -4,7 +4,6 @@ using System.Threading.Tasks;
 using AutoMapper;
 using Microsoft.EntityFrameworkCore;
 using TodoApp.DAL.Models;
-using TodoApp.Infra;
 using TodoApp.Infra.Dto;
 using TodoApp.Infra.Interfaces;
 
