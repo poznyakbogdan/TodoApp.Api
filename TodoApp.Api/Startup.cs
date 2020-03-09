@@ -32,7 +32,7 @@ namespace TodoApp.Api
             
             services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
 
-            services.AddTransient<IDesignTimeDbContextFactory<ApplicationContext>>(x => new ApplicationContextFactory(config.DatabaseConnectionString));
+            services.AddTransient<IDesignTimeDbContextFactory<ApplicationContext>>(x => new ApplicationContextSqlLiteFactory(config.DatabaseConnectionString));
             services.AddTransient(x =>
                 x.GetService<IDesignTimeDbContextFactory<ApplicationContext>>().CreateDbContext(new[] {""}));
             
