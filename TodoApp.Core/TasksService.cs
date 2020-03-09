@@ -36,6 +36,11 @@ namespace TodoApp.Core
             return await GetById(id);
         }
 
+        public async Task UpdateMany(IEnumerable<TaskDto> tasksDtos)
+        {
+            await _tasksRepository.UpdateMany(tasksDtos);
+        }
+
         public async Task Remove(int id)
         {
             await _tasksRepository.Remove(id);

@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 using AutoMapper;
 using Microsoft.EntityFrameworkCore;
@@ -22,7 +23,7 @@ namespace TodoApp.DAL.Repositories
 
         public async Task<TaskDto> GetById(int id)
         {
-            var task = await _context.Tasks.SingleAsync(x => x.Id == id);
+            var task = await _context.Tasks.Include(x => x.Category).SingleAsync(x => x.Id == id);
             return _mapper.Map<TaskDto>(task);
         }
 
@@ -59,8 +60,39 @@ namespace TodoApp.DAL.Repositories
             {
                 model.Status = (int)taskDto.Status.Value;
             }
+            
+            if (taskDto.CategoryId.HasValue)
+            {
+                model.CategoryId = taskDto.CategoryId.Value;
+            }
 
             _context.Tasks.Update(model);
+            await _context.SaveChangesAsync();
+        }
+
+        public async Task UpdateMany(IEnumerable<TaskDto> tasksDtos)
+        {
+            var tasks = _context.Tasks.Where(x => tasksDtos.Any(y => y.Id == x.Id));
+            await tasks.ForEachAsync(x =>
+            {
+                var newTask = tasksDtos.Single(y => y.Id == x.Id);
+                if (!string.IsNullOrEmpty(newTask.Description))
+                {
+                    x.Description = newTask.Description;
+                }
+                if (!string.IsNullOrEmpty(newTask.Name))
+                {
+                    x.Name = newTask.Name;
+                }
+                if (newTask.Status.HasValue)
+                {
+                    x.Status = (int)newTask.Status.Value;
+                }
+                if (newTask.CategoryId.HasValue)
+                {
+                    x.CategoryId = newTask.CategoryId.Value;
+                }
+            });
             await _context.SaveChangesAsync();
         }
 

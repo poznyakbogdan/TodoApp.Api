@@ -9,5 +9,7 @@ namespace TodoApp.DAL.Models
         public string Description { get; set; }
         public int Status { get; set; }
         public DateTime CreatedAt { get; set; }
+        public Category Category { get; set; }
+        public int? CategoryId { get; set; }
     }
 }

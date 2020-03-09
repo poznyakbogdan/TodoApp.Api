@@ -10,6 +10,7 @@ namespace TodoApp.Infra.Interfaces
         Task<IEnumerable<TaskDto>> Get();
         Task<int> Create(TaskDto taskDto);
         Task Update(int id, TaskDto taskDto);
+        Task UpdateMany(IEnumerable<TaskDto> tasksDtos);
         Task Remove(int id);
     }
 }

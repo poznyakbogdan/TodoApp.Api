@@ -12,6 +12,8 @@ namespace TodoApp.Api.Mapping
         {
             CreateMap<TaskDto, TaskOutputModel>();
             CreateMap<PostTaskModel, TaskDto>();
+            CreateMap<PutTaskModel, TaskDto>();
+            CreateMap<PatchTaskModel, TaskDto>();
         }
     }
 }

@@ -9,5 +9,6 @@ namespace TodoApp.Infra.Dto
         public string Description { get; set; }
         public TaskStatus? Status { get; set; }
         public DateTime CreatedAt { get; set; }
+        public int? CategoryId { get; set; }
     }
 }

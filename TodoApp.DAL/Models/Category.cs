@@ -2,10 +2,10 @@ using System.Collections.Generic;
 
 namespace TodoApp.DAL.Models
 {
-    public class TodoList
+    public class Category
     {
         public int Id { get; set; }
         public string Name { get; set; }
-        public IEnumerable<TaskModel> Tasks { get; set; }
+        public ICollection<TaskModel> Tasks { get; set; }
     }
 }
