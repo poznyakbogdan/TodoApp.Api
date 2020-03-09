@@ -36,17 +36,7 @@ namespace TodoApp.DAL
         {
             var newEntity = await _entities.AddAsync(entity);
         }
-
-        public Task<TEntity> UpdateAsync(TEntity entity)
-        {
-            throw new System.NotImplementedException();
-        }
-
-        public Task<IEnumerable<TEntity>> UpdateManyAsync(IEnumerable<TEntity> entities)
-        {
-            throw new System.NotImplementedException();
-        }
-
+        
         public void Remove(TEntity entity)
         {
             _entities.Remove(entity);
