@@ -7,18 +7,12 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
-using Microsoft.Extensions.Logging.Console;
-using Microsoft.Extensions.Options;
 using Microsoft.OpenApi.Models;
 using Serilog;
-using Serilog.Extensions.Logging;
-using Serilog.Hosting;
 using TodoApp.Core;
 using TodoApp.DAL;
-using TodoApp.DAL.Repositories;
+using TodoApp.Infra;
 using TodoApp.Infra.Interfaces;
-using ILogger = Serilog.ILogger;
-using SerilogLoggerFactory = Serilog.Extensions.Logging.SerilogLoggerFactory;
 
 namespace TodoApp.Api
 {
@@ -40,12 +34,13 @@ namespace TodoApp.Api
             services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
 
             services.AddTransient<IDesignTimeDbContextFactory<ApplicationContext>>(x => new ApplicationContextFactory(config.DatabaseConnectionString, x.GetService<ILoggerFactory>()));
-            services.AddTransient(x =>
+            services.AddScoped(x =>
                 x.GetService<IDesignTimeDbContextFactory<ApplicationContext>>().CreateDbContext(new[] {""}));
+
+            services.AddTransient<IRepositoryFactory, RepositoryFactory>();
+            services.AddTransient<IUnitOfWork, UnitOfWork>(); 
             
-            services.AddTransient<ITasksRepository, TasksRepository>();
             services.AddTransient<ITasksService, TasksService>();
-            services.AddTransient<ICategoriesRepository, CategoriesRepository>();
             services.AddTransient<ICategoriesService, CategoriesService>();
             
             services.AddControllers();

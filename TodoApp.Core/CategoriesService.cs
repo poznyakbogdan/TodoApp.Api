@@ -1,5 +1,8 @@
 ﻿using System.Collections.Generic;
 using System.Threading.Tasks;
+using AutoMapper;
+using TodoApp.DAL.Models;
+using TodoApp.Infra;
 using TodoApp.Infra.Dto;
 using TodoApp.Infra.Interfaces;
 
@@ -7,30 +10,38 @@ namespace TodoApp.Core
 {
     public class CategoriesService : ICategoriesService
     {
-        private readonly ICategoriesRepository _categoriesRepository;
-        
-        public CategoriesService(ICategoriesRepository categoriesRepository)
-        {
-            _categoriesRepository = categoriesRepository;
-        }
+        private readonly IUnitOfWork _unitOfWork;
+        private readonly IRepository<Category> _repository;
+        private readonly IMapper _mapper;
 
+        public CategoriesService(IUnitOfWork unitOfWork, IMapper mapper)
+        {
+            _unitOfWork = unitOfWork;
+            _repository = _unitOfWork.GetRepository<Category>();
+            _mapper = mapper;
+        }
+        
         public async Task<CategoryDto> Create(string name)
         {
-            var listId = await _categoriesRepository.Create(new CategoryDto
+            var category = new Category()
             {
-                Name = name,
-            });
-            return await GetById(listId);
+                Name = name
+            };
+            await _repository.CreateAsync(category);
+            await _unitOfWork.CommitAsync();
+            return _mapper.Map<CategoryDto>(category);
         }
 
         public async Task<CategoryDto> GetById(int id)
         {
-            return await _categoriesRepository.GetById(id);
+            var model = await _repository.GetByIdAsync(id);
+            return _mapper.Map<CategoryDto>(model);
         }
 
         public async Task<IEnumerable<CategoryDto>> GetAll()
         {
-            return await _categoriesRepository.Get();
+            var models = await _repository.GetAllAsync();
+            return _mapper.Map<IEnumerable<CategoryDto>>(models);
         }
     }
 }
