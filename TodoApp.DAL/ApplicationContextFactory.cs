@@ -18,7 +18,7 @@ namespace TodoApp.DAL
             var builder = new DbContextOptionsBuilder();
             builder
                 .UseLoggerFactory(_loggerFactory)
-                .UseMySQL(_connectionString);
+                .UseSqlite(_connectionString);
             return new ApplicationContext(builder.Options);
         }
     }
