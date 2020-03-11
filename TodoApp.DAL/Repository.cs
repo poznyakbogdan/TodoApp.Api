@@ -17,9 +17,9 @@ namespace TodoApp.DAL
             _entities = entities;
         }
 
-        public Task<TEntity> GetByIdAsync(int id)
+        public async Task<TEntity> GetByIdAsync(int id)
         {
-            return _entities.FindAsync(id);
+            return await _entities.FindAsync(id);
         }
 
         public async Task<IEnumerable<TEntity>> GetAllAsync()

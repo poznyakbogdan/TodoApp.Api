@@ -7,10 +7,10 @@ namespace TodoApp.Infra.Interfaces
 {
     public interface IRepository<TEntity>
     {
-        public Task<TEntity> GetByIdAsync(int id);
-        public Task<IEnumerable<TEntity>> GetAllAsync();
-        public Task<IEnumerable<TEntity>> FindAsync(Expression<Func<TEntity, bool>> expression);
-        public Task CreateAsync(TEntity entity);
-        public void Remove(TEntity entity);
+        Task<TEntity> GetByIdAsync(int id);
+        Task<IEnumerable<TEntity>> GetAllAsync();
+        Task<IEnumerable<TEntity>> FindAsync(Expression<Func<TEntity, bool>> expression);
+        Task CreateAsync(TEntity entity);
+        void Remove(TEntity entity);
     }
 }

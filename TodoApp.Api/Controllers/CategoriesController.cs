@@ -42,6 +42,28 @@ namespace TodoApp.Api.Controllers
             return _mapper.Map<CategoryOutputModel>(list);
         }
         
+        [HttpPut]
+        [Route("{id}")]
+        [ProducesResponseType(typeof(CategoryOutputModel), 200)]
+        [ProducesResponseType(404)]
+        [ProducesResponseType(500)]
+        public async Task<CategoryOutputModel> Update([FromRoute] int id, [FromBody] PostCategoryModel categoryModel)
+        {
+            var list = await _categoriesService.Update(id, categoryModel.Name);
+            return _mapper.Map<CategoryOutputModel>(list);
+        }
+        
+        [HttpDelete]
+        [Route("{id}")]
+        [ProducesResponseType(204)]
+        [ProducesResponseType(404)]
+        [ProducesResponseType(500)]
+        public async Task<ActionResult> Delete([FromRoute] int id)
+        {
+            await _categoriesService.Remove(id);
+            return NoContent();
+        }
+        
         [HttpGet]
         [ProducesResponseType(typeof(IEnumerable<CategoryOutputModel>), 200)]
         [ProducesResponseType(500)]
