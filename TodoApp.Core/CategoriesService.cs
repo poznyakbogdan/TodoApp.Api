@@ -37,6 +37,21 @@ namespace TodoApp.Core
             var model = await _repository.GetByIdAsync(id);
             return _mapper.Map<CategoryDto>(model);
         }
+        
+        public async Task<CategoryDto> Update(int id, string name)
+        {
+            var model = await _repository.GetByIdAsync(id);
+            model.Name = name;
+            await _unitOfWork.CommitAsync();
+            return _mapper.Map<CategoryDto>(model);
+        }
+        
+        public async Task Remove(int id)
+        {
+            var model = await _repository.GetByIdAsync(id);
+            _repository.Remove(model);
+            await _unitOfWork.CommitAsync();
+        }
 
         public async Task<IEnumerable<CategoryDto>> GetAll()
         {

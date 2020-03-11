@@ -8,6 +8,8 @@ namespace TodoApp.Infra.Interfaces
     {
         Task<CategoryDto> Create(string name);
         Task<CategoryDto> GetById(int id);
+        Task<CategoryDto> Update(int id, string name);
+        Task Remove(int id);
         Task<IEnumerable<CategoryDto>> GetAll();
     }
 }
