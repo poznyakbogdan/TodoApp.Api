@@ -11,6 +11,7 @@ using Microsoft.OpenApi.Models;
 using Serilog;
 using TodoApp.Core;
 using TodoApp.DAL;
+using TodoApp.DAL.Models;
 using TodoApp.Infra;
 using TodoApp.Infra.Interfaces;
 
@@ -36,13 +37,17 @@ namespace TodoApp.Api
             services.AddTransient<IDesignTimeDbContextFactory<ApplicationContext>>(x => new ApplicationContextFactory(config.DatabaseConnectionString, x.GetService<ILoggerFactory>()));
             services.AddScoped(x =>
                 x.GetService<IDesignTimeDbContextFactory<ApplicationContext>>().CreateDbContext(new[] {""}));
+            services.AddScoped(x =>
+                x.GetService<IDesignTimeDbContextFactory<IdentityDbContext>>().CreateDbContext(new[] {""}));
+
+            services.AddDefaultIdentity<User>()
+                .AddEntityFrameworkStores<IdentityDbContext>();
 
             services.AddTransient<IRepositoryFactory, RepositoryFactory>();
             services.AddTransient<IUnitOfWork, UnitOfWork>(); 
-            
             services.AddTransient<ITasksService, TasksService>();
             services.AddTransient<ICategoriesService, CategoriesService>();
-            
+
             services.AddControllers();
 
             services.AddCors(options =>
@@ -82,6 +87,9 @@ namespace TodoApp.Api
             app.UseRouting();
 
             app.UseCors();
+
+            app.UseAuthentication();
+            app.UseAuthorization();
             
             app.UseEndpoints(endpoints =>
             {
