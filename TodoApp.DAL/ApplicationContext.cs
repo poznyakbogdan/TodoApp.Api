@@ -12,5 +12,13 @@ namespace TodoApp.DAL
         {
             Database.EnsureCreated();
         }
+
+        protected override void OnModelCreating(ModelBuilder modelBuilder)
+        {
+            modelBuilder.Entity<TaskModel>()
+                .HasOne<Category>()
+                .WithMany(x => x.Tasks)
+                .OnDelete(DeleteBehavior.SetNull);
+        }
     }
 }

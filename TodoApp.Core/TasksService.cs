@@ -4,7 +4,6 @@ using System.Linq;
 using System.Threading.Tasks;
 using AutoMapper;
 using TodoApp.DAL.Models;
-using TodoApp.Infra;
 using TodoApp.Infra.Dto;
 using TodoApp.Infra.Interfaces;
 
@@ -65,7 +64,8 @@ namespace TodoApp.Core
             
             if (taskDto.CategoryId.HasValue)
             {
-                model.CategoryId = taskDto.CategoryId.Value;
+                var category = await _unitOfWork.GetRepository<Category>().GetByIdAsync(taskDto.CategoryId.Value);
+                category.Tasks.Add(model);
             }
 
             await _unitOfWork.CommitAsync();
@@ -75,7 +75,7 @@ namespace TodoApp.Core
         public async Task UpdateMany(IEnumerable<TaskDto> tasksDtos)
         {
             var models = await _repository.FindAsync(x => tasksDtos.Select(y => y.Id).Contains(x.Id));
-            tasksDtos.ToList().ForEach(x =>
+            tasksDtos.ToList().ForEach(async x =>
             {
                 var model = models.Single(y => y.Id == x.Id);
                 
@@ -96,7 +96,8 @@ namespace TodoApp.Core
             
                 if (x.CategoryId.HasValue)
                 {
-                    model.CategoryId = x.CategoryId.Value;
+                    var category = await _unitOfWork.GetRepository<Category>().GetByIdAsync(x.CategoryId.Value);
+                    category.Tasks.Add(model);
                 }
             });
             await _unitOfWork.CommitAsync();
