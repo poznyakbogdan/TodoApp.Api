@@ -23,7 +23,7 @@ namespace TodoApp.Tests.Core
             var factoryMock = new Mock<IRepositoryFactory>();
             factoryMock
                 .Setup(x => x.Create<TaskModel>())
-                .Returns(new Repository<TaskModel>(_context.Tasks));
+                .Returns(new Repository<TaskModel>(_context));
             _unitOfWork = new UnitOfWork(_context, factoryMock.Object);    
         }
 

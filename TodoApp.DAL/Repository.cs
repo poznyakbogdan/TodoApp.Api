@@ -12,9 +12,9 @@ namespace TodoApp.DAL
     {
         private readonly DbSet<TEntity> _entities;
 
-        public Repository(DbSet<TEntity> entities)
+        public Repository(ApplicationContext context)
         {
-            _entities = entities;
+            _entities = context.Set<TEntity>();
         }
 
         public async Task<TEntity> GetByIdAsync(int id)

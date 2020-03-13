@@ -57,7 +57,7 @@ namespace TodoApp.Core
             tasksDtos.ToList().ForEach(async x =>
             {
                 var model = models.Single(y => y.Id == x.Id);
-                await UpdateTask(model, x);
+                _mapper.Map(x, model);
             });
             await _unitOfWork.CommitAsync();
         }
@@ -67,27 +67,6 @@ namespace TodoApp.Core
             var entity = await _repository.GetByIdAsync(id);
             _repository.Remove(entity);
             await _unitOfWork.CommitAsync();
-        }
-
-        private async Task UpdateTask(TaskModel modelToUpdate, TaskDto taskDto)
-        {
-            if (!string.IsNullOrEmpty(taskDto.Name))
-            {
-                modelToUpdate.Name = taskDto.Name;
-            }
-            if (!string.IsNullOrEmpty(taskDto.Description))
-            {
-                modelToUpdate.Description = taskDto.Description;
-            }
-            if (taskDto.Status.HasValue)
-            {
-                modelToUpdate.Status = (int)taskDto.Status.Value;
-            }
-            if (taskDto.CategoryId.HasValue)
-            {
-                var category = await _unitOfWork.GetRepository<Category>().GetByIdAsync(taskDto.CategoryId.Value);
-                category.Tasks.Add(modelToUpdate);
-            }   
         }
     }
 }

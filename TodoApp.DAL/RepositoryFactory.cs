@@ -1,18 +1,20 @@
-﻿using TodoApp.Infra.Interfaces;
+﻿using System;
+using Microsoft.Extensions.DependencyInjection;
+using TodoApp.Infra.Interfaces;
 
 namespace TodoApp.DAL
 {
     public class RepositoryFactory : IRepositoryFactory
     {
-        private readonly ApplicationContext _context;
+        private readonly IServiceProvider _serviceProvider;
 
-        public RepositoryFactory(ApplicationContext context)
+        public RepositoryFactory(IServiceProvider serviceProvider)
         {
-            _context = context;
+            _serviceProvider = serviceProvider;
         }
         public IRepository<TEntity> Create<TEntity>() where TEntity: class
         {
-            return new Repository<TEntity>(_context.Set<TEntity>());
+            return _serviceProvider.GetService<IRepository<TEntity>>();
         }
     }
 }

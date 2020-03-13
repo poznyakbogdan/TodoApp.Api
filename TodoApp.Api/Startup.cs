@@ -32,6 +32,7 @@ namespace TodoApp.Api
             services.AddTransient<IDesignTimeDbContextFactory<ApplicationContext>>(x => new ApplicationContextFactory(config.DatabaseConnectionString, x.GetService<ILoggerFactory>()));
             services.AddScoped(x =>
                 x.GetService<IDesignTimeDbContextFactory<ApplicationContext>>().CreateDbContext(new[] {""}));
+            services.AddTransient(typeof(IRepository<>), typeof(Repository<>));
             services.AddTransient<IRepositoryFactory, RepositoryFactory>();
             services.AddTransient<IUnitOfWork, UnitOfWork>(); 
             services.AddTransient<ITasksService, TasksService>();
