@@ -34,7 +34,7 @@ namespace TodoApp.DAL
 
         public async Task CreateAsync(TEntity entity)
         {
-            var newEntity = await _entities.AddAsync(entity);
+            await _entities.AddAsync(entity);
         }
         
         public void Remove(TEntity entity)

@@ -45,30 +45,9 @@ namespace TodoApp.Core
 
         public async Task<TaskDto> Update(int id, TaskDto taskDto)
         {
+            taskDto.Id = id;
+            await UpdateMany(new []{taskDto});
             var model = await _repository.GetByIdAsync(id);
-
-            if (!string.IsNullOrEmpty(taskDto.Name))
-            {
-                model.Name = taskDto.Name;
-            }
-            
-            if (!string.IsNullOrEmpty(taskDto.Description))
-            {
-                model.Description = taskDto.Description;
-            }
-            
-            if (taskDto.Status.HasValue)
-            {
-                model.Status = (int)taskDto.Status.Value;
-            }
-            
-            if (taskDto.CategoryId.HasValue)
-            {
-                var category = await _unitOfWork.GetRepository<Category>().GetByIdAsync(taskDto.CategoryId.Value);
-                category.Tasks.Add(model);
-            }
-
-            await _unitOfWork.CommitAsync();
             return _mapper.Map<TaskDto>(model);
         }
 
@@ -78,27 +57,7 @@ namespace TodoApp.Core
             tasksDtos.ToList().ForEach(async x =>
             {
                 var model = models.Single(y => y.Id == x.Id);
-                
-                if (!string.IsNullOrEmpty(x.Name))
-                {
-                    model.Name = x.Name;
-                }
-            
-                if (!string.IsNullOrEmpty(x.Description))
-                {
-                    model.Description = x.Description;
-                }
-            
-                if (x.Status.HasValue)
-                {
-                    model.Status = (int)x.Status.Value;
-                }
-            
-                if (x.CategoryId.HasValue)
-                {
-                    var category = await _unitOfWork.GetRepository<Category>().GetByIdAsync(x.CategoryId.Value);
-                    category.Tasks.Add(model);
-                }
+                await UpdateTask(model, x);
             });
             await _unitOfWork.CommitAsync();
         }
@@ -108,6 +67,27 @@ namespace TodoApp.Core
             var entity = await _repository.GetByIdAsync(id);
             _repository.Remove(entity);
             await _unitOfWork.CommitAsync();
+        }
+
+        private async Task UpdateTask(TaskModel modelToUpdate, TaskDto taskDto)
+        {
+            if (!string.IsNullOrEmpty(taskDto.Name))
+            {
+                modelToUpdate.Name = taskDto.Name;
+            }
+            if (!string.IsNullOrEmpty(taskDto.Description))
+            {
+                modelToUpdate.Description = taskDto.Description;
+            }
+            if (taskDto.Status.HasValue)
+            {
+                modelToUpdate.Status = (int)taskDto.Status.Value;
+            }
+            if (taskDto.CategoryId.HasValue)
+            {
+                var category = await _unitOfWork.GetRepository<Category>().GetByIdAsync(taskDto.CategoryId.Value);
+                category.Tasks.Add(modelToUpdate);
+            }   
         }
     }
 }

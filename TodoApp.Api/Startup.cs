@@ -11,7 +11,6 @@ using Microsoft.OpenApi.Models;
 using Serilog;
 using TodoApp.Core;
 using TodoApp.DAL;
-using TodoApp.Infra;
 using TodoApp.Infra.Interfaces;
 
 namespace TodoApp.Api
@@ -25,31 +24,23 @@ namespace TodoApp.Api
 
         public IConfiguration Configuration { get; }
 
-        // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
             var config = new Config();
             Configuration.Bind(config);
-            
             services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
-
             services.AddTransient<IDesignTimeDbContextFactory<ApplicationContext>>(x => new ApplicationContextFactory(config.DatabaseConnectionString, x.GetService<ILoggerFactory>()));
             services.AddScoped(x =>
                 x.GetService<IDesignTimeDbContextFactory<ApplicationContext>>().CreateDbContext(new[] {""}));
-
             services.AddTransient<IRepositoryFactory, RepositoryFactory>();
             services.AddTransient<IUnitOfWork, UnitOfWork>(); 
-            
             services.AddTransient<ITasksService, TasksService>();
             services.AddTransient<ICategoriesService, CategoriesService>();
-            
             services.AddControllers();
-
             services.AddCors(options =>
             {
                 options.AddDefaultPolicy(builder => { builder.AllowAnyOrigin().AllowAnyMethod().AllowAnyHeader(); });
             });
-
             services.AddSwaggerGen(x =>
             {
                 x.SwaggerDoc("v1", new OpenApiInfo()
@@ -60,29 +51,22 @@ namespace TodoApp.Api
             });
         }
 
-        // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
         {
             if (env.IsDevelopment())
             {
                 app.UseDeveloperExceptionPage();
             }
-
             app.UseSerilogRequestLogging();
-            
             app.UseSwagger();
             app.UseSwaggerUI(x =>
             {
                 x.SwaggerEndpoint("/swagger/v1/swagger.json", "v1");
                 x.RoutePrefix = "swagger";
             });
-            
             app.UseHttpsRedirection();
-            
             app.UseRouting();
-
             app.UseCors();
-            
             app.UseEndpoints(endpoints =>
             {
                 endpoints.MapControllers();

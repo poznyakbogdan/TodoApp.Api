@@ -29,18 +29,18 @@ namespace TodoApp.Tests.Core
 
         [Test]
         [Order(0)]
-        public void ShouldNotAddEntityToDb()
+        public void ShouldNotAddEntitiesToDb()
         {
             var insertedCount = 5;
             var beforeLength = _context.Tasks.Count();
             Enumerable.Range(0, insertedCount).ToList().ForEach(x => _context.Tasks.Add(new TaskModel() { }));
             var afterLength = _context.Tasks.Count();
-            Assert.AreNotEqual(beforeLength + insertedCount, afterLength);
+            Assert.AreEqual(beforeLength, afterLength);
         }
         
         [Test]
         [Order(1)]
-        public async Task ShouldAddEntityToDb()
+        public async Task ShouldAddEntitiesToDb()
         {
             var insertedCount = 5;
             var beforeLength = _context.Tasks.Count();

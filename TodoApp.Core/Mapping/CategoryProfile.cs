@@ -4,9 +4,9 @@ using TodoApp.Infra.Dto;
 
 namespace TodoApp.Core.Mapping
 {
-    public class TodoListProfile : Profile
+    public class CategoryProfile : Profile
     {
-        public TodoListProfile()
+        public CategoryProfile()
         {
             CreateMap<Category, CategoryDto>();
             CreateMap<CategoryDto, Category>();
