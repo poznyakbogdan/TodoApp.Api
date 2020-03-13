@@ -1,0 +1,17 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+    <PropertyGroup>
+        <TargetFramework>netcoreapp3.1</TargetFramework>
+    </PropertyGroup>
+
+    <ItemGroup>
+      <PackageReference Include="MySql.Data" Version="8.0.19" />
+      <PackageReference Include="MySql.Data.EntityFrameworkCore" Version="8.0.19" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <ProjectReference Include="..\TodoApp.DAL.Models\TodoApp.DAL.Models.csproj" />
+      <ProjectReference Include="..\TodoApp.Infra\TodoApp.Infra.csproj" />
+    </ItemGroup>
+
+</Project>
