@@ -2,7 +2,7 @@
 using TodoApp.DAL.Models;
 using TodoApp.Infra.Dto;
 
-namespace TodoApp.DAL.Mapping
+namespace TodoApp.Core.Mapping
 {
     public class TaskProfile : Profile
     {

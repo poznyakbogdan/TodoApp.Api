@@ -74,5 +74,15 @@ namespace TodoApp.Api.Controllers
             await _tasksService.Remove(id);
             return NoContent();
         }
+
+        [HttpPatch]
+        [ProducesResponseType(204)]
+        [ProducesResponseType(404)]
+        [ProducesResponseType(500)]
+        public async Task<ActionResult> Update([FromBody] IEnumerable<PatchTaskModel> tasksModels)
+        {
+            await _tasksService.UpdateMany(_mapper.Map<IEnumerable<TaskDto>>(tasksModels));
+            return NoContent();
+        }
     }
 }

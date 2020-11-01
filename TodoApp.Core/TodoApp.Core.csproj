@@ -5,10 +5,12 @@
     </PropertyGroup>
 
     <ItemGroup>
+      <ProjectReference Include="..\TodoApp.DAL.Models\TodoApp.DAL.Models.csproj" />
       <ProjectReference Include="..\TodoApp.Infra\TodoApp.Infra.csproj" />
     </ItemGroup>
 
     <ItemGroup>
+      <PackageReference Include="AutoMapper" Version="9.0.0" />
       <PackageReference Include="Microsoft.Extensions.Logging.Abstractions" Version="3.1.2" />
     </ItemGroup>
 
